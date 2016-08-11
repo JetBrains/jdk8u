@@ -72,11 +72,11 @@ AC_DEFUN([TOOLCHAIN_CHECK_COMPILER_VERSION],
   else
     COMPILER_VERSION_TEST=`$COMPILER --version 2>&1 | $HEAD -n 1`
     # Check that this is likely to be GCC.
-    $COMPILER --version 2>&1 | $GREP "Free Software Foundation" > /dev/null
+    $COMPILER --version 2>&1 | $GREP -E "Apple LLVM version|Free Software Foundation" > /dev/null
     if test $? -ne 0; then
-      AC_MSG_NOTICE([The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required GCC compiler.])
+      AC_MSG_NOTICE([The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required compiler.])
       AC_MSG_NOTICE([The result from running with --version was: "$COMPILER_VERSION_TEST"])
-      AC_MSG_ERROR([GCC compiler is required. Try setting --with-tools-dir.])
+      AC_MSG_ERROR([clang or GCC compiler is required. Try setting --with-tools-dir.])
     fi
 
     # First line typically looks something like:
@@ -290,7 +290,7 @@ AC_DEFUN([TOOLCHAIN_SETUP_PATHS],
     # Fail-fast: verify we're building on Xcode 4, we cannot build with Xcode 5 or later
     XCODE_VERSION=`$XCODEBUILD -version | grep '^Xcode ' | sed 's/Xcode //'`
     XC_VERSION_PARTS=( ${XCODE_VERSION//./ } )
-    if test ! "${XC_VERSION_PARTS[[0]]}" = "4"; then
+    if test ! ${XC_VERSION_PARTS[[0]]} -ge 4 ; then
       AC_MSG_ERROR([Xcode 4 is required to build JDK 8, the version found was $XCODE_VERSION. Use --with-xcode-path to specify the location of Xcode 4 or make Xcode 4 active by using xcode-select.])
     fi
 

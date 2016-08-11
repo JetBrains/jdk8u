@@ -3672,7 +3672,7 @@ fi
 
 
 #
-# Copyright (c) 2011, 2012, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2011, 2015, Oracle and/or its affiliates. All rights reserved.
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
 # This code is free software; you can redistribute it and/or modify it
@@ -3880,7 +3880,7 @@ fi
 #CUSTOM_AUTOCONF_INCLUDE
 
 # Do not change or remove the following line, it is needed for consistency checks:
-DATE_WHEN_GENERATED=1449096260
+DATE_WHEN_GENERATED=1466789102
 
 ###############################################################################
 #
@@ -19333,7 +19333,7 @@ fi
     # Fail-fast: verify we're building on Xcode 4, we cannot build with Xcode 5 or later
     XCODE_VERSION=`$XCODEBUILD -version | grep '^Xcode ' | sed 's/Xcode //'`
     XC_VERSION_PARTS=( ${XCODE_VERSION//./ } )
-    if test ! "${XC_VERSION_PARTS[0]}" = "4"; then
+    if test ! ${XC_VERSION_PARTS[0]} -ge 4 ; then
       as_fn_error $? "Xcode 4 is required to build JDK 8, the version found was $XCODE_VERSION. Use --with-xcode-path to specify the location of Xcode 4 or make Xcode 4 active by using xcode-select." "$LINENO" 5
     fi
 
@@ -20357,13 +20357,13 @@ $as_echo "$as_me: The result from running with -V was: \"$COMPILER_VERSION_TEST\
   else
     COMPILER_VERSION_TEST=`$COMPILER --version 2>&1 | $HEAD -n 1`
     # Check that this is likely to be GCC.
-    $COMPILER --version 2>&1 | $GREP "Free Software Foundation" > /dev/null
+    $COMPILER --version 2>&1 | $GREP -E "Apple LLVM version|Free Software Foundation" > /dev/null
     if test $? -ne 0; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required GCC compiler." >&5
-$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required GCC compiler." >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required compiler." >&5
+$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required compiler." >&6;}
       { $as_echo "$as_me:${as_lineno-$LINENO}: The result from running with --version was: \"$COMPILER_VERSION_TEST\"" >&5
 $as_echo "$as_me: The result from running with --version was: \"$COMPILER_VERSION_TEST\"" >&6;}
-      as_fn_error $? "GCC compiler is required. Try setting --with-tools-dir." "$LINENO" 5
+      as_fn_error $? "clang or GCC compiler is required. Try setting --with-tools-dir." "$LINENO" 5
     fi
 
     # First line typically looks something like:
@@ -21958,13 +21958,13 @@ $as_echo "$as_me: The result from running with -V was: \"$COMPILER_VERSION_TEST\
   else
     COMPILER_VERSION_TEST=`$COMPILER --version 2>&1 | $HEAD -n 1`
     # Check that this is likely to be GCC.
-    $COMPILER --version 2>&1 | $GREP "Free Software Foundation" > /dev/null
+    $COMPILER --version 2>&1 | $GREP -E "Apple LLVM version|Free Software Foundation" > /dev/null
     if test $? -ne 0; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required GCC compiler." >&5
-$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required GCC compiler." >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required compiler." >&5
+$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required compiler." >&6;}
       { $as_echo "$as_me:${as_lineno-$LINENO}: The result from running with --version was: \"$COMPILER_VERSION_TEST\"" >&5
 $as_echo "$as_me: The result from running with --version was: \"$COMPILER_VERSION_TEST\"" >&6;}
-      as_fn_error $? "GCC compiler is required. Try setting --with-tools-dir." "$LINENO" 5
+      as_fn_error $? "clang or GCC compiler is required. Try setting --with-tools-dir." "$LINENO" 5
     fi
 
     # First line typically looks something like:
