@@ -10,7 +10,7 @@
 [github.com/JetBrains/jdk8u_langtools](https://github.com/JetBrains/jdk8u_langtools/)  
 [github.com/JetBrains/jdk8u_nashorn](https://github.com/JetBrains/jdk8u_nashorn/)  
     
-Usually, we do not modify any of the repositories except [jdk]((https://github.com/JetBrains/jdk8u_jdk/)) module. Other repositories are needed for build purposes.
+Usually, we do not modify any of the repositories except [jdk](https://github.com/JetBrains/jdk8u_jdk/) module. Other repositories are needed for build purposes.
 ##Getting sources
 To get sources you need:
 ```
