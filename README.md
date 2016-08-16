@@ -1,5 +1,16 @@
 #How JetBrains Runtime is organised
-Usually, we do not modify any of the repositories except “jdk" one. Other repositories are needed for build purposes.
+##Workspaces
+
+[github.com/JetBrains/jdk8u](https://github.com/JetBrains/jdk8u/)  
+[github.com/JetBrains/jdk8u_corba](https://github.com/JetBrains/jdk8u_corba/)  
+[github.com/JetBrains/jdk8u_hotspot](https://github.com/JetBrains/jdk8u_hotspot/)  
+[github.com/JetBrains/jdk8u_jaxp](https://github.com/JetBrains/jdk8u_jaxp/)  
+[github.com/JetBrains/jdk8u_jaxws](https://github.com/JetBrains/jdk8u_jaxws/)  
+[github.com/JetBrains/jdk8u_jdk](https://github.com/JetBrains/jdk8u_jdk/)  
+[github.com/JetBrains/jdk8u_langtools](https://github.com/JetBrains/jdk8u_langtools/)  
+[github.com/JetBrains/jdk8u_nashorn](https://github.com/JetBrains/jdk8u_nashorn/)  
+    
+Usually, we do not modify any of the repositories except [jdk]((https://github.com/JetBrains/jdk8u_jdk/)) module. Other repositories are needed for build purposes.
 ##Getting sources
 To get sources you need:
 ```
