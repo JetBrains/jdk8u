@@ -1,40 +1,60 @@
-README:
-  This file should be located at the top of the OpenJDK Mercurial root
-  repository. A full OpenJDK repository set (forest) should also include
-  the following 6 nested repositories:
-    "jdk", "hotspot", "langtools", "corba", "jaxws"  and "jaxp".
+#How JetBrains Runtime is organised
+Usually, we do not modify any of the repositories except “jdk" one. Other repositories are needed for build purposes.
+##Getting sources
+To get sources you need:
+```
+git clone git@github.com:JetBrains/jdk8u.git
+cd jdk8u
+./getModules.sh
+```
+or `getModules.bat` on Windows
 
-  The root repository can be obtained with something like:
-    hg clone http://hg.openjdk.java.net/jdk8/jdk8 openjdk8
-  
-  You can run the get_source.sh script located in the root repository to get
-  the other needed repositories:
-    cd openjdk8 && sh ./get_source.sh
+##Linux-x64
+We are using Docker image of CentOS 6.7 to build 64 bit linux images. Current docker image submitted to the docker hub is alexatdocker/centos-ojdkenv:latestv9
+Here is Dockerfile  for creating  current build environment. You need to put it into the separate folder along with the following opt.tgz archive unpacked. Then use the following commands to update the image:
+```
+docker build .
+docker images # To see the created image (c6d85cd2d3c5)
+docker tag c6d85cd2d3c5 alexatdocker/centos-ojdkenv:latestv5
+docker push alexatdocker/centos-ojdkenv
+```
+##Linux-x32
+There is no official Docker image of 32bit CentOS 6.7. So, we're creating it by ourselves:
+```
+export BASEURL="http://mirror.centos.org/centos-6/6/os/i386/Packages/"
+sudo mkdir /tmp/sysroot
+sudo wget "${BASEURL}/centos-release-6-7.el6.centos.12.3.i686.rpm"
+sudo rpm --root /tmp/sysroot --rebuilddb
+sudo rpm --root /tmp/sysroot -i centos-release-6-7.el6.centos.12.3.i686.rpm
+sudo yum --nogpgcheck --installroot=/tmp/sysroot groupinstall base
+sudo sed -e 's/$releasever/6/g' -i /tmp/sysroot/etc/yum.repos.d/CentOS-Base.repo
+sudo tar -czf /tmp/sysroot.tgz -C /tmp/sysroot/ .
+cat /tmp/sysroot.tgz | docker import - centos32
+docker run -i -t centos32 linux32 /bin/bash
+docker images # To see the created image (c9ed933f7021)
+docker tag c9ed933f7021 alexatdocker/centos32:base
+docker push  alexatdocker/centos32
+```
+Then we use the same procedure as we had for x64 to create build environment using modified Dockerfile
+```
+docker build .
+docker images # To see the created image (e72fd4701c0d)
+docker tag e72fd4701c0d alexatdocker/centos32:jbr_build_env0
+docker push alexatdocker/centos32
+```
 
-  People unfamiliar with Mercurial should read the first few chapters of
-  the Mercurial book: http://hgbook.red-bean.com/read/
-
-  See http://openjdk.java.net/ for more information about OpenJDK.
-
-Simple Build Instructions:
-  
-  0. Get the necessary system software/packages installed on your system, see
-     http://hg.openjdk.java.net/jdk8/jdk8/raw-file/tip/README-builds.html
-
-  1. If you don't have a jdk7u7 or newer jdk, download and install it from
-     http://java.sun.com/javase/downloads/index.jsp
-     Add the /bin directory of this installation to your PATH environment
-     variable.
-
-  2. Configure the build:
-       bash ./configure
-  
-  3. Build the OpenJDK:
-       make all
-     The resulting JDK image should be found in build/*/images/j2sdk-image
-
-where make is GNU make 3.81 or newer, /usr/bin/make on Linux usually
-is 3.81 or newer. Note that on Solaris, GNU make is called "gmake".
-
-Complete details are available in the file:
-     http://hg.openjdk.java.net/jdk8/jdk8/raw-file/tip/README-builds.html
+#Configure Local Build Environment
+##Linux
+```
+sudo apt-get install git zip bzip2 unzip tar curl
+sudo apt-get install ccache make gcc g++ ca-certificates ca-certificates-java
+sudo apt-get install libxext-dev libxrender-dev libxtst-dev libxt-dev
+sudo apt-get install libasound2-dev libcups2-dev libfreetype6-dev
+git clone git@github.com:JetBrains/jdk8u.git
+cd jdk8u
+./getModules.sh
+download jdk8 from Oracle into /home/user/jdk1.8.0_102
+export JAVA_HOME=/home/user/jdk1.8.0_102
+sh ./configure
+make
+```
