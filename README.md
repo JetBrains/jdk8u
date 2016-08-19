@@ -99,3 +99,35 @@ Configure and run make  in cygwin shell
  ./configure  --with-target-bits=64 --with-freetype=/cygdrive/freetype/  
   make images
 ```
+
+##OSX
+XCode
+* Login to https://developer.apple.com with your Apple ID. Download 
+[Xcode 4.6.3](https://developer.apple.com/devcenter/download.action?path=/Developer_Tools/xcode_4.6.3/xcode4630916281a.dmg)
+and put Xcode.app into /Applications/Xcode4
+
+_The latest XCode can be used, but you need to run make with COMPILER_WARNINGS_FATAL=false_
+
+Freetype
+* Install [XQuartz](https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.9.dmg) or build Freetype from 
+ [sources](https://www.freetype.org/download.html)
+```
+cd freetype
+./configure
+./make
+mkdir lib
+cp objs/.libs/libfreetype.dylib lib/
+```
+
+Configure and build jdk
+```
+export MACOSX_DEPLOYMENT_TARGET=10.8
+cd /path_to_jdk8/
+bash configure --with-xcode-path=/Applications/Xcode4/Xcode4.app --with-freetype=/path_to_freetype
+make images
+```
+or
+```
+make COMPILER_WARNINGS_FATAL=false images
+```
+for the latest XCode
