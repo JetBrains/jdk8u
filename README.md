@@ -12,46 +12,20 @@
     
 Usually, we do not modify any of the repositories except [jdk](https://github.com/JetBrains/jdk8u_jdk/) module. Other repositories are needed for build purposes.
 ##Getting sources
-To get sources you need:
+__OSX, Linux:__
 ```
+git config --global core.autocrlf true
 git clone git@github.com:JetBrains/jdk8u.git
 cd jdk8u
 ./getModules.sh
 ```
-or `getModules.bat` on Windows
 
-##Linux-x64
-We are using Docker image of CentOS 6.7 to build 64 bit linux images. Current docker image submitted to the docker hub is alexatdocker/centos-ojdkenv:latestv9
-Here is Dockerfile  for creating  current build environment. You need to put it into the separate folder along with the following opt.tgz archive unpacked. Then use the following commands to update the image:
+__Windows:__
 ```
-docker build .
-docker images # To see the created image (c6d85cd2d3c5)
-docker tag c6d85cd2d3c5 alexatdocker/centos-ojdkenv:latestv5
-docker push alexatdocker/centos-ojdkenv
-```
-##Linux-x32
-There is no official Docker image of 32bit CentOS 6.7. So, we're creating it by ourselves:
-```
-export BASEURL="http://mirror.centos.org/centos-6/6/os/i386/Packages/"
-sudo mkdir /tmp/sysroot
-sudo wget "${BASEURL}/centos-release-6-7.el6.centos.12.3.i686.rpm"
-sudo rpm --root /tmp/sysroot --rebuilddb
-sudo rpm --root /tmp/sysroot -i centos-release-6-7.el6.centos.12.3.i686.rpm
-sudo yum --nogpgcheck --installroot=/tmp/sysroot groupinstall base
-sudo sed -e 's/$releasever/6/g' -i /tmp/sysroot/etc/yum.repos.d/CentOS-Base.repo
-sudo tar -czf /tmp/sysroot.tgz -C /tmp/sysroot/ .
-cat /tmp/sysroot.tgz | docker import - centos32
-docker run -i -t centos32 linux32 /bin/bash
-docker images # To see the created image (c9ed933f7021)
-docker tag c9ed933f7021 alexatdocker/centos32:base
-docker push  alexatdocker/centos32
-```
-Then we use the same procedure as we had for x64 to create build environment using modified Dockerfile
-```
-docker build .
-docker images # To see the created image (e72fd4701c0d)
-docker tag e72fd4701c0d alexatdocker/centos32:jbr_build_env0
-docker push alexatdocker/centos32
+git config --global core.autocrlf false
+git clone git@github.com:JetBrains/jdk8u.git
+cd jdk8u
+getModules.bat
 ```
 
 #Configure Local Build Environment
@@ -68,4 +42,60 @@ download jdk8 from Oracle into /home/user/jdk1.8.0_102
 export JAVA_HOME=/home/user/jdk1.8.0_102
 sh ./configure
 make
+```
+
+##Windows
+
+Install:
+
+* Cygwin x64 (http://www.cygwin.com/)
+  Required packages (binutils, cpio, diffutils, file, gawk, gcc-core, m4, unzip, zip)
+* Windows SDK 7.1 offline installer [GRMSDKX_EN_DVD.iso](https://download.microsoft.com/download/F/1/0/F10113F5-B750-4969-A255-274341AC6BCE/GRMSDKX_EN_DVD.iso)
+Run Setup\SDKSetup 
+* Visual Studio Express 2010 offline installer [VS2010Express1.iso](http://download.microsoft.com/download/1/E/5/1E5F1C0A-0D5B-426A-A603-1798B951DDAE/VS2010Express1.iso)
+* [DirectX 9.0 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=6812)
+* [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+
+Build Freetype:
+* Download [sources](https://www.freetype.org/download.html)
+* Execute the following script in builds\windows\vc2010
+```
+(echo ^<?xml version="1.0" encoding="utf-8"?^>
+echo ^<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"^>
+echo ^<PropertyGroup Label="Globals"^>
+echo ^<TargetName^>freetype^</TargetName^>
+echo ^<UserIncludeDirectories^>.^</UserIncludeDirectories^>
+echo ^</PropertyGroup^>
+echo ^<ItemDefinitionGroup^>
+echo ^<ClCompile^>
+echo ^<ForcedIncludeFiles^>jb_custom.h^</ForcedIncludeFiles^>
+echo ^</ClCompile^>
+echo ^</ItemDefinitionGroup^>
+echo ^</Project^>) > freetype.user.props
+(echo #ifndef __JB_CUSTOM_H__
+echo #define __JB_CUSTOM_H__
+echo #define FT_EXPORT^(x^) __declspec^(dllexport^) x
+echo #define FT_BASE^(x^) __declspec^(dllexport^) x
+echo #endif) > jb_custom.h
+```
+* Build with VC Express for **x64** or **win32** target
+* Put freetype.dll, freetype.lib, freetype.exp in lib folder at the same level with include:
+```
+freetype
+  include
+  lib
+```
+
+Configure and run make  in cygwin shell 
+* __32 bit__ (use --with-msvcr-dll=/cygdrive/c/windows/SysWOW64/msvcr100.dll on 64 bit windows)
+```    
+  cd /cygdrive/c/jdk8/
+ ./configure  --with-target-bits=32 --with-freetype=/cygdrive/freetype/  
+  make images
+```
+* __64 bit__
+```    
+  cd /cygdrive/c/jdk8/
+ ./configure  --with-target-bits=64 --with-freetype=/cygdrive/freetype/  
+  make images
 ```
