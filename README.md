@@ -131,3 +131,6 @@ or
 make COMPILER_WARNINGS_FATAL=false images
 ```
 for the latest XCode
+
+##Contribution
+We will be happy to receive your pull requests. Before you submit one, please sign our Contributor License Agreement (CLA)  https://www.jetbrains.com/agreements/cla/ 
