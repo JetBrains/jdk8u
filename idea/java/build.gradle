@@ -1,0 +1,24 @@
+import static java.lang.System.out
+import static java.lang.System.err
+
+def makeCmd = "make -C " +
+        project.buildscript.sourceFile.parentFile.parentFile.parentFile +
+        " COMPILER_WARNINGS_FATAL=false"
+
+defaultTasks 'images'
+
+task images << {
+    println makeCmd + " images"
+    def proc = makeCmd.execute()
+    proc.consumeProcessOutput(out, err)
+    proc.waitFor()
+    assert proc.exitValue() == 0
+}
+
+task clean << {
+    println makeCmd + " clean"
+    def proc = makeCmd.execute()
+    proc.consumeProcessOutput(out, err)
+    proc.waitFor()
+    assert proc.exitValue() == 0
+}
