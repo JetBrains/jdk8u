@@ -1,9 +1,17 @@
+apply plugin: 'java'
+
 import static java.lang.System.out
 import static java.lang.System.err
 
-def makeCmd = "make -C " +
-        project.buildscript.sourceFile.parentFile.parentFile.parentFile +
-        " COMPILER_WARNINGS_FATAL=false"
+
+sourceSets.main.java.srcDirs =
+        ["../../jdk/src/share/classes",
+         "../../jdk/src/macosx/classes",
+         "../../jdk/src/windows/classes",
+         "../../jdk/src/solaris/classes"]
+
+def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
+def makeCmd = "make -C " + buildDir + " COMPILER_WARNINGS_FATAL=false"
 
 defaultTasks 'images'
 
