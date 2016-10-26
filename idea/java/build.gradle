@@ -10,23 +10,28 @@ sourceSets.main.java.srcDirs =
          "../../jdk/src/windows/classes",
          "../../jdk/src/solaris/classes"]
 
+
+
 def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
 def makeCmd = "make -C " + buildDir + " COMPILER_WARNINGS_FATAL=false"
+def makeImagesCmd = makeCmd + " images"
+def makeCleanCmd = makeCmd + " clean"
 
-defaultTasks 'images'
 
-task images << {
-    println makeCmd + " images"
-    def proc = makeCmd.execute()
+task make_images << {
+    def proc = makeImagesCmd.execute()
     proc.consumeProcessOutput(out, err)
     proc.waitFor()
     assert proc.exitValue() == 0
 }
 
-task clean << {
-    println makeCmd + " clean"
-    def proc = makeCmd.execute()
+task make_clean << {
+    def proc = makeCleanCmd.execute()
     proc.consumeProcessOutput(out, err)
     proc.waitFor()
     assert proc.exitValue() == 0
 }
+
+tasks.compileJava.enabled = false
+classes.dependsOn tasks.make_images
+tasks.cleanClasses.dependsOn tasks.make_clean
