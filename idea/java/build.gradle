@@ -1,35 +1,68 @@
 apply plugin: 'java'
 
+import org.gradle.internal.os.OperatingSystem
 import static java.lang.System.out
 import static java.lang.System.err
 
+repositories {
+    mavenCentral()
+}
 
+configurations {
+    antClasspath
+}
+
+def test_jvm = {
+    if (OperatingSystem.current().isMacOsX()) {
+        file('../../build/macosx-x86_64-normal-server-release/images/j2sdk-bundle/jdk1.8.0.jdk/Contents/Home/bin/java').absolutePath
+    } else if (OperatingSystem.current().isLinux()) {
+        file('../../build/linux-x86_64-normal-server-release/images/j2sdk-image/bin/java').absolutePath
+    } else {
+        'not implemented'
+    }
+}
+dependencies {
+    antClasspath 'ant-contrib:ant-contrib:20020829', 'org.apache.ant:ant-junit:1.8.1'
+}
+
+
+// add additional jars to the AntBuilder classpath for use within the imported build.
+ClassLoader antClassLoader = org.apache.tools.ant.Project.class.classLoader
+configurations.antClasspath.each { File f ->
+    antClassLoader.addURL(f.toURI().toURL())
+}
+
+ant.importBuild('../../jdk/idea/java/tests/perf_tests.xml') { antTargetName ->
+    'jdk-perf-' + antTargetName
+}
+
+ant.properties.test_jvm = test_jvm()
+
+println ant.properties.test_jvm
 sourceSets.main.java.srcDirs =
         ["../../jdk/src/share/classes",
          "../../jdk/src/macosx/classes",
          "../../jdk/src/windows/classes",
-         "../../jdk/src/solaris/classes"]
-
-
+         "../../jdk/src/solaris/classes",
+         "../../jdk/idea/java/tests/src"
+        ]
 
 def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
-def makeCmd = "make -C " + buildDir + " COMPILER_WARNINGS_FATAL=false"
-def makeImagesCmd = makeCmd + " images"
-def makeCleanCmd = makeCmd + " clean"
-
 
 task make_images << {
-    def proc = makeImagesCmd.execute()
+    def pb = new ProcessBuilder().command("make", "-C", buildDir.absolutePath,
+            " COMPILER_WARNINGS_FATAL=false", "images")
+    def proc = pb.start()
     proc.consumeProcessOutput(out, err)
-    proc.waitFor()
-    assert proc.exitValue() == 0
+    assert proc.waitFor() == 0
 }
 
 task make_clean << {
-    def proc = makeCleanCmd.execute()
+    def pb = new ProcessBuilder().command("make", "-C", buildDir.absolutePath,
+            " COMPILER_WARNINGS_FATAL=false", "clean")
+    def proc = pb.start()
     proc.consumeProcessOutput(out, err)
-    proc.waitFor()
-    assert proc.exitValue() == 0
+    assert proc.waitFor() == 0
 }
 
 tasks.compileJava.enabled = false
