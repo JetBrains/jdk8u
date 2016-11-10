@@ -48,11 +48,12 @@ make
 
 Install:
 
-* Cygwin x64 (http://www.cygwin.com/)
-  Required packages (binutils, cpio, diffutils, file, gawk, gcc-core, m4, unzip, zip)
+* [Cygwin x64](http://www.cygwin.com/)
+  Required packages (binutils, cpio, diffutils, file, gawk, gcc-core, make, m4, unzip, zip)
 * Windows SDK 7.1 offline installer [GRMSDKX_EN_DVD.iso](https://download.microsoft.com/download/F/1/0/F10113F5-B750-4969-A255-274341AC6BCE/GRMSDKX_EN_DVD.iso)
 Run Setup\SDKSetup 
 * Visual Studio Express 2010 offline installer [VS2010Express1.iso](http://download.microsoft.com/download/1/E/5/1E5F1C0A-0D5B-426A-A603-1798B951DDAE/VS2010Express1.iso)
+  * [Virtual CloneDrive](http://www.elby.ch/products/vcd.html) may help to mount ISO images
 * [DirectX 9.0 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=6812)
 * [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
