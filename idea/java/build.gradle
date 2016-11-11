@@ -18,7 +18,7 @@ def test_jvm = {
     } else if (OperatingSystem.current().isLinux()) {
         file('../../build/linux-x86_64-normal-server-release/images/j2sdk-image/bin/java').absolutePath
     } else {
-        'not implemented'
+        file('../../build/windows-x86_64-normal-server-release/images/j2sdk-image/bin/java.exe').absolutePath
     }
 }
 dependencies {
@@ -50,7 +50,7 @@ sourceSets.main.java.srcDirs =
 def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
 
 task make_images << {
-    def pb = new ProcessBuilder().command("make", "-C", buildDir.absolutePath,
+    def pb = new ProcessBuilder().inheritIO().command("make", "-C", buildDir.absolutePath,
             " COMPILER_WARNINGS_FATAL=false", "images")
     def proc = pb.start()
     proc.consumeProcessOutput(out, err)
@@ -58,7 +58,7 @@ task make_images << {
 }
 
 task make_clean << {
-    def pb = new ProcessBuilder().command("make", "-C", buildDir.absolutePath,
+    def pb = new ProcessBuilder().inheritIO().command("make", "-C", buildDir.absolutePath,
             " COMPILER_WARNINGS_FATAL=false", "clean")
     def proc = pb.start()
     proc.consumeProcessOutput(out, err)
