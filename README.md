@@ -109,6 +109,9 @@ and put Xcode.app into /Applications/Xcode4
 
 _The latest XCode can be used, but you need to run make with COMPILER_WARNINGS_FATAL=false_
 
+Command Line Tools
+* Download and install Command Line Tools via XCode Preferences / Downloads or from https://developer.apple.com (for example, [Command Line Tools, April 2014](https://developer.apple.com/downloads/download.action?path=Developer_Tools/command_line_tools_os_x_mountain_lion_for_xcode__april_2014/command_line_tools_for_osx_mountain_lion_april_2014.dmg) for OS X Mountain Lion).
+
 Freetype
 * Install [XQuartz](https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.9.dmg) or build Freetype from 
  [sources](https://www.freetype.org/download.html)
@@ -124,7 +127,7 @@ Configure and build jdk
 ```
 export MACOSX_DEPLOYMENT_TARGET=10.8
 cd /path_to_jdk8/
-bash configure --with-xcode-path=/Applications/Xcode4/Xcode4.app --with-freetype=/path_to_freetype
+bash configure --with-xcode-path=/Applications/Xcode4/Xcode4.app --with-freetype=/opt/X11/lib --with-freetype-include=/usr/X11/include/freetype2
 make images
 ```
 or
