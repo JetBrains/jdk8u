@@ -42,13 +42,22 @@ ant.importBuild('../../jdk/idea/java/tests/perf_tests.xml') { antTargetName ->
 ant.properties.test_jvm = test_jvm()
 
 println ant.properties.test_jvm
-sourceSets.main.java.srcDirs =
+
+if (OperatingSystem.current().isMacOsX())
+    sourceSets.main.java.srcDirs =
         ["../../jdk/src/share/classes",
          "../../jdk/src/macosx/classes",
-         "../../jdk/src/windows/classes",
+        ]
+else if (OperatingSystem.current().isLinux())
+    sourceSets.main.java.srcDirs =
+        ["../../jdk/src/share/classes",
          "../../jdk/src/solaris/classes"
         ]
-
+else
+    sourceSets.main.java.srcDirs =
+        ["../../jdk/src/share/classes",
+         "../../jdk/src/windows/classes",
+        ]
 
 sourceSets.test.java.srcDirs = ["../../jdk/idea/java/tests/src"]
 
