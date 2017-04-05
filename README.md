@@ -1,12 +1,12 @@
-#Downloads
+# Downloads
 
 |Windows-x86  |Windows-x64  |macOS        |Linux-x86    |Linux-x64    |
 |-------------|-------------|-------------|-------------|-------------|
 |<a href="https://bintray.com/jetbrains/intellij-jdk/openjdk8-windows-x86/_latestVersion"> <img src="https://api.bintray.com/packages/jetbrains/intellij-jdk/openjdk8-windows-x86/images/download.svg"/></a>|<a href="https://bintray.com/jetbrains/intellij-jdk/openjdk8-windows-x64/_latestVersion"> <img src="https://api.bintray.com/packages/jetbrains/intellij-jdk/openjdk8-windows-x64/images/download.svg"/></a>|<a href="https://bintray.com/jetbrains/intellij-jdk/openjdk8-osx-x64/_latestVersion"> <img src="https://api.bintray.com/packages/jetbrains/intellij-jdk/openjdk8-osx-x64/images/download.svg"/></a>|<a href="https://bintray.com/jetbrains/intellij-jdk/openjdk8-linux-x86/_latestVersion"> <img src="https://api.bintray.com/packages/jetbrains/intellij-jdk/openjdk8-linux-x86/images/download.svg"/></a>|<a href="https://bintray.com/jetbrains/intellij-jdk/openjdk8-linux-x64/_latestVersion"><img src="https://api.bintray.com/packages/jetbrains/intellij-jdk/openjdk8-linux-x64/images/download.svg"/></a>|
 
 
-#How JetBrains Runtime is organised
-##Workspaces
+# How JetBrains Runtime is organised
+## Workspaces
 
 [github.com/JetBrains/jdk8u](https://github.com/JetBrains/jdk8u/)  
 [github.com/JetBrains/jdk8u_corba](https://github.com/JetBrains/jdk8u_corba/)  
@@ -18,7 +18,7 @@
 [github.com/JetBrains/jdk8u_nashorn](https://github.com/JetBrains/jdk8u_nashorn/)  
 
 Usually, we do not modify any of the repositories except [jdk](https://github.com/JetBrains/jdk8u_jdk/) module. Other repositories are needed for build purposes.
-##Getting sources
+## Getting sources
 __OSX, Linux:__
 ```
 git config --global core.autocrlf true
@@ -35,8 +35,8 @@ cd jdk8u
 getModules.bat
 ```
 
-#Configure Local Build Environment
-##Linux
+# Configure Local Build Environment
+## Linux
 ```
 sudo apt-get install git zip bzip2 unzip tar curl
 sudo apt-get install ccache make gcc g++ ca-certificates ca-certificates-java
@@ -51,7 +51,7 @@ sh ./configure
 make
 ```
 
-##Windows
+## Windows
 
 Install:
 
@@ -108,7 +108,7 @@ Configure and run make  in cygwin shell
   make images
 ```
 
-##OSX
+## OSX
 XCode
 * Login to https://developer.apple.com with your Apple ID. Download 
 [Xcode 4.6.3](https://developer.apple.com/devcenter/download.action?path=/Developer_Tools/xcode_4.6.3/xcode4630916281a.dmg)
@@ -143,5 +143,5 @@ make COMPILER_WARNINGS_FATAL=false images
 ```
 for the latest XCode
 
-##Contribution
+## Contribution
 We will be happy to receive your pull requests. Before you submit one, please sign our Contributor License Agreement (CLA)  https://www.jetbrains.com/agreements/cla/ 
