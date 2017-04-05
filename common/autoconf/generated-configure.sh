@@ -29785,6 +29785,7 @@ $as_echo "$supports" >&6; }
           ;;
         * )
           COMMON_CCXXFLAGS_JDK="$COMMON_CCXXFLAGS_JDK -fno-omit-frame-pointer"
+	  CXXFLAGS_JDK="$CXXFLAGS_JDK -std=gnu++98"
           CFLAGS_JDK="${CFLAGS_JDK} -fno-strict-aliasing"
           ;;
       esac
