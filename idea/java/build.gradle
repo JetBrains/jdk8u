@@ -63,8 +63,14 @@ sourceSets.test.java.srcDirs = ["../../jdk/idea/java/tests/src"]
 
 def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
 
+def make_cmd = "make"
+if (OperatingSystem.current().isWindows()) {
+    def cyg_make_cmd = new File("c:/cygwin64/bin/make.exe")
+    if (cyg_make_cmd.exists()) make_cmd = cyg_make_cmd.absolutePath
+}
+
 task make_images << {
-    def pb = new ProcessBuilder().command("make", "-C", buildDir.absolutePath,
+    def pb = new ProcessBuilder().command(make_cmd.toString(), "-C", buildDir.absolutePath,
             " COMPILER_WARNINGS_FATAL=false", "images")
     def proc = pb.redirectErrorStream(true).start()
     proc.inputStream.eachLine {println it}
@@ -72,7 +78,7 @@ task make_images << {
 }
 
 task make_clean << {
-    def pb = new ProcessBuilder().command("make", "-C", buildDir.absolutePath,
+    def pb = new ProcessBuilder().command(make_cmd.toString(), "-C", buildDir.absolutePath,
             " COMPILER_WARNINGS_FATAL=false", "clean")
     def proc = pb.redirectErrorStream(true).start()
     proc.inputStream.eachLine {println it}
