@@ -21,7 +21,7 @@ Usually, we do not modify any of the repositories except [jdk](https://github.co
 ## Getting sources
 __OSX, Linux:__
 ```
-git config --global core.autocrlf true
+git config --global core.autocrlf input
 git clone git@github.com:JetBrains/jdk8u.git
 cd jdk8u
 ./getModules.sh
