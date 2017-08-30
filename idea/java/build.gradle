@@ -59,7 +59,13 @@ else
          "../../jdk/src/windows/classes",
         ]
 
-sourceSets.test.java.srcDirs = ["../../jdk/idea/java/tests/src"]
+sourceSets.test.java.srcDirs = ["../../jdk/idea/java/tests/src", "../../jdk/test/jbu"]
+
+test.executable = test_jvm()
+
+test {
+    systemProperty "testdata", file('../../jdk/test/jbu/testdata').absolutePath
+}
 
 def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
 
