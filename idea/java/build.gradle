@@ -16,7 +16,6 @@ def test_jvm = {
 }
 
 dependencies {
-    antClasspath 'ant-contrib:ant-contrib:20020829', 'org.apache.ant:ant-junit:1.8.1'
     testCompile('junit:junit:4.12'){
         exclude group: 'org.hamcrest'
     }
