@@ -1,13 +1,8 @@
 apply plugin: 'java'
-
 import org.gradle.internal.os.OperatingSystem
 
 repositories {
     mavenCentral()
-}
-
-configurations {
-    antClasspath
 }
 
 def test_jvm = {
@@ -29,20 +24,6 @@ dependencies {
 }
 
 
-// add additional jars to the AntBuilder classpath for use within the imported build.
-ClassLoader antClassLoader = org.apache.tools.ant.Project.class.classLoader
-configurations.antClasspath.each { File f ->
-    antClassLoader.addURL(f.toURI().toURL())
-}
-
-ant.importBuild('../../jdk/idea/java/tests/perf_tests.xml') { antTargetName ->
-    'jdk-perf-' + antTargetName
-}
-
-ant.properties.test_jvm = test_jvm()
-
-println ant.properties.test_jvm
-
 if (OperatingSystem.current().isMacOsX())
     sourceSets.main.java.srcDirs =
         ["../../jdk/src/share/classes",
@@ -59,12 +40,14 @@ else
          "../../jdk/src/windows/classes",
         ]
 
-sourceSets.test.java.srcDirs = ["../../jdk/idea/java/tests/src", "../../jdk/test/jbu"]
+sourceSets.test.java.srcDirs = ["../../jdk/test/jbu"]
 
 test.executable = test_jvm()
 
 test {
     systemProperty "testdata", file('../../jdk/test/jbu/testdata').absolutePath
+    outputs.upToDateWhen { false }
+    testLogging.showStandardStreams = true
 }
 
 def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
@@ -96,3 +79,5 @@ tasks.compileTestJava.dependsOn.clear()
 classes.dependsOn.clear()
 classes.dependsOn tasks.make_images, tasks.compileTestJava
 tasks.cleanClasses.dependsOn tasks.make_clean
+test.dependsOn.clear()
+test.dependsOn tasks.compileTestJava
