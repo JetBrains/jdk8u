@@ -7,7 +7,7 @@ repositories {
 
 def test_jvm = {
     if (project.hasProperty('jbsdkhome')) {
-        jbsdkhome + (OperatingSystem.current().isWindows()?"/bin/java.exe" : "/bin/java")
+        file(jbsdkhome + (OperatingSystem.current().isWindows()?"/bin/java.exe" : "/bin/java")).absolutePath
     } else {
         if (OperatingSystem.current().isMacOsX()) {
             file('../../build/macosx-x86_64-normal-server-release/images/j2sdk-bundle/jdk1.8.0.jdk/Contents/Home/bin/java').absolutePath
