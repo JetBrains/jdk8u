@@ -6,12 +6,16 @@ repositories {
 }
 
 def test_jvm = {
-    if (OperatingSystem.current().isMacOsX()) {
-        file('../../build/macosx-x86_64-normal-server-release/images/j2sdk-bundle/jdk1.8.0.jdk/Contents/Home/bin/java').absolutePath
-    } else if (OperatingSystem.current().isLinux()) {
-        file('../../build/linux-x86_64-normal-server-release/images/j2sdk-image/bin/java').absolutePath
+    if (project.hasProperty('jbsdkhome')) {
+        jbsdkhome + (OperatingSystem.current().isWindows()?"/bin/java.exe" : "/bin/java")
     } else {
-        file('../../build/windows-x86_64-normal-server-release/images/j2sdk-image/bin/java.exe').absolutePath
+        if (OperatingSystem.current().isMacOsX()) {
+            file('../../build/macosx-x86_64-normal-server-release/images/j2sdk-bundle/jdk1.8.0.jdk/Contents/Home/bin/java').absolutePath
+        } else if (OperatingSystem.current().isLinux()) {
+            file('../../build/linux-x86_64-normal-server-release/images/j2sdk-image/bin/java').absolutePath
+        } else {
+            file('../../build/windows-x86_64-normal-server-release/images/j2sdk-image/bin/java.exe').absolutePath
+        }
     }
 }
 
