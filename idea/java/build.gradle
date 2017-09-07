@@ -24,6 +24,9 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
     testCompile 'org.hamcrest:hamcrest-library:1.3'
+    testCompile 'net.java.dev.jna:jna:4.4.0'
+    testCompile 'com.twelvemonkeys.imageio:imageio-tiff:3.3.2'
+    testCompile 'org.apache.commons:commons-lang3:3.0'
 }
 
 
@@ -45,12 +48,13 @@ else
 
 sourceSets.test.java.srcDirs = ["../../jdk/test/jbu"]
 
-test.executable = test_jvm()
+test.dependsOn.clear()
+test.dependsOn tasks.compileTestJava
 
 test {
     systemProperty "testdata", file('../../jdk/test/jbu/testdata').absolutePath
     outputs.upToDateWhen { false }
-    testLogging.showStandardStreams = true
+    executable = test_jvm()
 }
 
 def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
@@ -82,5 +86,3 @@ tasks.compileTestJava.dependsOn.clear()
 classes.dependsOn.clear()
 classes.dependsOn tasks.make_images, tasks.compileTestJava
 tasks.cleanClasses.dependsOn tasks.make_clean
-test.dependsOn.clear()
-test.dependsOn tasks.compileTestJava
