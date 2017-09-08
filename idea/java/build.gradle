@@ -53,8 +53,18 @@ test.dependsOn tasks.compileTestJava
 
 test {
     systemProperty "testdata", file('../../jdk/test/jbu/testdata').absolutePath
+
+//  Generate golden images for DroidFontTest and MixedTextTest
+//    systemProperty "gentestdata", ""
+
     outputs.upToDateWhen { false }
     executable = test_jvm()
+
+//  Enable J2D logging (only in debug build)
+//  Can be turned on for J2D by adding "#define DEBUG 1" into jdk/src/share/native/sun/java2d/Trace.h
+
+//    environment 'J2D_TRACE_LEVEL', '4'
+
 }
 
 def buildDir = project.buildscript.sourceFile.parentFile.parentFile.parentFile
