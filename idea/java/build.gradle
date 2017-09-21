@@ -139,7 +139,9 @@ model {
     }
 }
 
-test.dependsOn  'envSharedLibrary'
+if (project.hasProperty('jnitests')) {
+    test.dependsOn 'envSharedLibrary'
+}
 
 tasks.compileJava.enabled = false
 tasks.compileTestJava.dependsOn.clear()
