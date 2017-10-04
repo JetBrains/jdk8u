@@ -1,3 +1,5 @@
+[![official JetBrains project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+
 # Downloads
 
 |Windows-x86  |Windows-x64  |macOS        |Linux-x86    |Linux-x64    |
