@@ -5,3 +5,4 @@ git clone git@github.com:JetBrains/jdk8u_jaxws.git jaxws
 git clone git@github.com:JetBrains/jdk8u_jdk.git jdk
 git clone git@github.com:JetBrains/jdk8u_langtools.git langtools
 git clone git@github.com:JetBrains/jdk8u_nashorn.git nashorn
+git clone git@github.com:JetBrains/jdk8u_jb.git jb
