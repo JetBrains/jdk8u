@@ -3239,7 +3239,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 #
-# Copyright (c) 2011, 2012, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2011, 2016, Oracle and/or its affiliates. All rights reserved.
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
 # This code is free software; you can redistribute it and/or modify it
@@ -3912,7 +3912,7 @@ fi
 #CUSTOM_AUTOCONF_INCLUDE
 
 # Do not change or remove the following line, it is needed for consistency checks:
-DATE_WHEN_GENERATED=1468207795
+DATE_WHEN_GENERATED=1522743827
 
 ###############################################################################
 #
@@ -7310,8 +7310,8 @@ $as_echo "$as_me: Your cygwin is too old. You are running $CYGWIN_VERSION, but a
     fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking cygwin root directory as unix-style path" >&5
 $as_echo_n "checking cygwin root directory as unix-style path... " >&6; }
-    # The cmd output ends with Windows line endings (CR/LF), the grep command will strip that away
-    cygwin_winpath_root=`cd / ; cmd /c cd | grep ".*"`
+    # The cmd output ends with Windows line endings (CR/LF)
+    cygwin_winpath_root=`cd / ; cmd /c cd | $TR -d '\r\n'`
     # Force cygpath to report the proper root by including a trailing space, and then stripping it off again.
     CYGWIN_ROOT_PATH=`$CYGPATH -u "$cygwin_winpath_root " | $CUT -f 1 -d " "`
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CYGWIN_ROOT_PATH" >&5
@@ -16980,6 +16980,7 @@ $as_echo "no" >&6; }
   if test "x$with_toolsdir" != x; then
 
   if test "x$VS_ENV_CMD" = x; then
+    VS_VERSION="2010"
     VS100BASE="$with_toolsdir/../.."
     METHOD="--with-tools-dir"
 
@@ -17021,6 +17022,7 @@ $as_echo "$as_me: Please point to the VC/bin directory within the Visual Studio 
   if test "x$VS100COMNTOOLS" != x; then
 
   if test "x$VS_ENV_CMD" = x; then
+    VS_VERSION="2010"
     VS100BASE="$VS100COMNTOOLS/../.."
     METHOD="VS100COMNTOOLS variable"
 
@@ -17051,6 +17053,7 @@ $as_echo "$as_me: Warning: $VCVARSFILE is missing, this is probably Visual Studi
   if test "x$PROGRAMFILES" != x; then
 
   if test "x$VS_ENV_CMD" = x; then
+    VS_VERSION="2010"
     VS100BASE="$PROGRAMFILES/Microsoft Visual Studio 10.0"
     METHOD="well-known name"
 
@@ -17080,6 +17083,7 @@ $as_echo "$as_me: Warning: $VCVARSFILE is missing, this is probably Visual Studi
   fi
 
   if test "x$VS_ENV_CMD" = x; then
+    VS_VERSION="2010"
     VS100BASE="C:/Program Files/Microsoft Visual Studio 10.0"
     METHOD="well-known name"
 
@@ -17108,7 +17112,37 @@ $as_echo "$as_me: Warning: $VCVARSFILE is missing, this is probably Visual Studi
 
 
   if test "x$VS_ENV_CMD" = x; then
+    VS_VERSION="2010"
     VS100BASE="C:/Program Files (x86)/Microsoft Visual Studio 10.0"
+    METHOD="well-known name"
+
+  windows_path="$VS100BASE"
+  if test "x$OPENJDK_BUILD_OS_ENV" = "xwindows.cygwin"; then
+    unix_path=`$CYGPATH -u "$windows_path"`
+    VS100BASE="$unix_path"
+  elif test "x$OPENJDK_BUILD_OS_ENV" = "xwindows.msys"; then
+    unix_path=`$ECHO "$windows_path" | $SED -e 's,^\\(.\\):,/\\1,g' -e 's,\\\\,/,g'`
+    VS100BASE="$unix_path"
+  fi
+
+    if test -d "$VS100BASE"; then
+      if test -f "$VS100BASE/$VCVARSFILE"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: Found Visual Studio installation at $VS100BASE using $METHOD" >&5
+$as_echo "$as_me: Found Visual Studio installation at $VS100BASE using $METHOD" >&6;}
+        VS_ENV_CMD="$VS100BASE/$VCVARSFILE"
+      else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: Found Visual Studio installation at $VS100BASE using $METHOD" >&5
+$as_echo "$as_me: Found Visual Studio installation at $VS100BASE using $METHOD" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: Warning: $VCVARSFILE is missing, this is probably Visual Studio Express. Ignoring" >&5
+$as_echo "$as_me: Warning: $VCVARSFILE is missing, this is probably Visual Studio Express. Ignoring" >&6;}
+      fi
+    fi
+  fi
+
+
+  if test "x$VS_ENV_CMD" = x; then
+    VS_VERSION="2013"
+    VS100BASE="C:/Program Files (x86)/Microsoft Visual Studio 12.0"
     METHOD="well-known name"
 
   windows_path="$VS100BASE"
@@ -29734,6 +29768,7 @@ fi
       COMMON_CCXXFLAGS_JDK="$COMMON_CCXXFLAGS $COMMON_CCXXFLAGS_JDK -W -Wall -Wno-unused -Wno-parentheses \
       -pipe \
       -D_GNU_SOURCE -D_REENTRANT -D_LARGEFILE64_SOURCE"
+      CXXSTD_CXXFLAG="-std=gnu++98"
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking if the C++ compiler supports \"$CXXSTD_CXXFLAG $CFLAGS_WARNINGS_ARE_ERRORS\"" >&5
 $as_echo_n "checking if the C++ compiler supports \"$CXXSTD_CXXFLAG $CFLAGS_WARNINGS_ARE_ERRORS\"... " >&6; }
@@ -29785,7 +29820,6 @@ $as_echo "$supports" >&6; }
           ;;
         * )
           COMMON_CCXXFLAGS_JDK="$COMMON_CCXXFLAGS_JDK -fno-omit-frame-pointer"
-	  CXXFLAGS_JDK="$CXXFLAGS_JDK -std=gnu++98"
           CFLAGS_JDK="${CFLAGS_JDK} -fno-strict-aliasing"
           ;;
       esac
@@ -30031,8 +30065,16 @@ $as_echo "$supports" >&6; }
       LDFLAGS_CXX_JDK="$LDFLAGS_CXX_JDK"
       ;;
     cl )
+      # If building with Visual Studio 2010, we can still use _STATIC_CPPLIB to
+      # avoid bundling msvcpNNN.dll. Doesn't work with newer versions of visual
+      # studio.
+      STATIC_CPPLIB_FLAGS=""
+      if test "x$VS_VERSION" = "x2010"; then
+        STATIC_CPPLIB_FLAGS="-D_STATIC_CPPLIB -D_DISABLE_DEPRECATE_STATIC_CPPLIB"
+      fi
+
       COMMON_CCXXFLAGS_JDK="$COMMON_CCXXFLAGS $COMMON_CCXXFLAGS_JDK -Zi -MD -Zc:wchar_t- -W3 -wd4800 \
-      -D_STATIC_CPPLIB -D_DISABLE_DEPRECATE_STATIC_CPPLIB -DWIN32_LEAN_AND_MEAN \
+      $STATIC_CPPLIB_FLAGS -DWIN32_LEAN_AND_MEAN \
       -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE \
       -DWIN32 -DIAL"
       case $OPENJDK_TARGET_CPU in

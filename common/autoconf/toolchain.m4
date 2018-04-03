@@ -1064,8 +1064,16 @@ AC_DEFUN_ONCE([TOOLCHAIN_SETUP_COMPILER_FLAGS_FOR_JDK],
       LDFLAGS_CXX_JDK="$LDFLAGS_CXX_JDK"
       ;;
     cl )
+      # If building with Visual Studio 2010, we can still use _STATIC_CPPLIB to
+      # avoid bundling msvcpNNN.dll. Doesn't work with newer versions of visual
+      # studio.
+      STATIC_CPPLIB_FLAGS=""
+      if test "x$VS_VERSION" = "x2010"; then
+        STATIC_CPPLIB_FLAGS="-D_STATIC_CPPLIB -D_DISABLE_DEPRECATE_STATIC_CPPLIB"
+      fi
+
       COMMON_CCXXFLAGS_JDK="$COMMON_CCXXFLAGS $COMMON_CCXXFLAGS_JDK -Zi -MD -Zc:wchar_t- -W3 -wd4800 \
-      -D_STATIC_CPPLIB -D_DISABLE_DEPRECATE_STATIC_CPPLIB -DWIN32_LEAN_AND_MEAN \
+      $STATIC_CPPLIB_FLAGS -DWIN32_LEAN_AND_MEAN \
       -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE \
       -DWIN32 -DIAL"
       case $OPENJDK_TARGET_CPU in

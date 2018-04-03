@@ -26,8 +26,9 @@
 AC_DEFUN([TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT],
 [
   if test "x$VS_ENV_CMD" = x; then
-    VS100BASE="$1"
-    METHOD="$2"
+    VS_VERSION="$1"
+    VS100BASE="$2"
+    METHOD="$3"
     BASIC_WINDOWS_REWRITE_AS_UNIX_PATH(VS100BASE)
     if test -d "$VS100BASE"; then
       if test -f "$VS100BASE/$VCVARSFILE"; then
@@ -80,7 +81,7 @@ AC_DEFUN([TOOLCHAIN_FIND_VISUAL_STUDIO_BAT_FILE],
   VS_ENV_CMD=""
   VS_ENV_ARGS=""
   if test "x$with_toolsdir" != x; then
-    TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([$with_toolsdir/../..], [--with-tools-dir])
+    TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([2010], [$with_toolsdir/../..], [--with-tools-dir])
   fi
 
   if test "x$with_toolsdir" != x && test "x$VS_ENV_CMD" = x; then
@@ -92,13 +93,14 @@ AC_DEFUN([TOOLCHAIN_FIND_VISUAL_STUDIO_BAT_FILE],
   fi
 
   if test "x$VS100COMNTOOLS" != x; then
-    TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([$VS100COMNTOOLS/../..], [VS100COMNTOOLS variable])
+    TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([2010], [$VS100COMNTOOLS/../..], [VS100COMNTOOLS variable])
   fi
   if test "x$PROGRAMFILES" != x; then
-    TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([$PROGRAMFILES/Microsoft Visual Studio 10.0], [well-known name])
+    TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([2010], [$PROGRAMFILES/Microsoft Visual Studio 10.0], [well-known name])
   fi
-  TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([C:/Program Files/Microsoft Visual Studio 10.0], [well-known name])
-  TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([C:/Program Files (x86)/Microsoft Visual Studio 10.0], [well-known name])
+  TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([2010], [C:/Program Files/Microsoft Visual Studio 10.0], [well-known name])
+  TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([2010], [C:/Program Files (x86)/Microsoft Visual Studio 10.0], [well-known name])
+  TOOLCHAIN_CHECK_POSSIBLE_VISUAL_STUDIO_ROOT([2013], [C:/Program Files (x86)/Microsoft Visual Studio 12.0], [well-known name])
 
   if test "x$ProgramW6432" != x; then
     TOOLCHAIN_CHECK_POSSIBLE_WIN_SDK_ROOT([$ProgramW6432/Microsoft SDKs/Windows/v7.1/Bin], [well-known name])
