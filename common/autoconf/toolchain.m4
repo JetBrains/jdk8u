@@ -1021,7 +1021,13 @@ AC_DEFUN_ONCE([TOOLCHAIN_SETUP_COMPILER_FLAGS_FOR_JDK],
       COMMON_CCXXFLAGS_JDK="$COMMON_CCXXFLAGS $COMMON_CCXXFLAGS_JDK -W -Wall -Wno-unused -Wno-parentheses \
       -pipe \
       -D_GNU_SOURCE -D_REENTRANT -D_LARGEFILE64_SOURCE"
-      CXXSTD_CXXFLAG="-std=gnu++98"
+      
+      CC_VER_STR=`${CC} -v 2>&1 | $GREP 'version'`
+      CC_VER_NUM_MAJOR=`echo ${CC_VER_STR} | $GREP 'version' | $SED 's/.* version@<:@ @:>@*\(@<:@0-9@:>@*\).*/\1/'`
+      if test \( `echo ${CC_VER_STR} | $GREP -c 'LLVM'` -eq "0" \) -a ${CC_VER_NUM_MAJOR} -lt "9" ; then
+        CXXSTD_CXXFLAG="-std=gnu++98"
+      fi
+
       TOOLCHAIN_CXX_COMPILER_CHECK_ARGUMENTS([$CXXSTD_CXXFLAG $CFLAGS_WARNINGS_ARE_ERRORS],
     					     [], [CXXSTD_CXXFLAG=""])
       CXXFLAGS_JDK="${CXXFLAGS_JDK} ${CXXSTD_CXXFLAG}"
