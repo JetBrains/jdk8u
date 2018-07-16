@@ -1028,4 +1028,11 @@ define SetupNativeCompilationBody
   endif
 endef
 
+define CompileMetalShaders
+    $(ECHO) "----Compile Metal  Shaders----" ; \
+    $(TOUCH) /Users/avu/sss
+endef
+
+
+
 endif # _NATIVE_COMPILATION_GMK
