@@ -271,7 +271,7 @@ AC_DEFUN_ONCE([TOOLCHAIN_PRE_DETECTION],
     # Fail-fast: verify we're building on Xcode 4, we cannot build with Xcode 5 or later
     XCODE_VERSION=`$XCODEBUILD -version | grep '^Xcode ' | sed 's/Xcode //'`
     XC_VERSION_PARTS=( ${XCODE_VERSION//./ } )
-    if test ! "${XC_VERSION_PARTS[[0]]}" = "4"; then
+    if test ! "${XC_VERSION_PARTS[[0]]}" -ge 4; then
       AC_MSG_ERROR([Xcode 4 is required to build JDK 8, the version found was $XCODE_VERSION. Use --with-xcode-path to specify the location of Xcode 4 or make Xcode 4 active by using xcode-select.])
     fi
 
@@ -422,7 +422,7 @@ AC_DEFUN([TOOLCHAIN_EXTRACT_COMPILER_VERSION],
     #     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     COMPILER_VERSION_OUTPUT=`$COMPILER --version 2>&1`
     # Check that this is likely to be GCC.
-    $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP "Free Software Foundation" > /dev/null
+    $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP "Apple LLVM version\|Free Software Foundation" > /dev/null
     if test $? -ne 0; then
       AC_MSG_NOTICE([The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler.])
       AC_MSG_NOTICE([The result from running with --version was: "$COMPILER_VERSION"])

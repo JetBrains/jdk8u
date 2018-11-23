@@ -3455,7 +3455,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 #
-# Copyright (c) 2011, 2012, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2011, 2016, Oracle and/or its affiliates. All rights reserved.
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
 # This code is free software; you can redistribute it and/or modify it
@@ -4342,7 +4342,7 @@ VS_SDK_PLATFORM_NAME_2017=
 #CUSTOM_AUTOCONF_INCLUDE
 
 # Do not change or remove the following line, it is needed for consistency checks:
-DATE_WHEN_GENERATED=1540846365
+DATE_WHEN_GENERATED=1542996501
 
 ###############################################################################
 #
@@ -26682,7 +26682,7 @@ fi
     # Fail-fast: verify we're building on Xcode 4, we cannot build with Xcode 5 or later
     XCODE_VERSION=`$XCODEBUILD -version | grep '^Xcode ' | sed 's/Xcode //'`
     XC_VERSION_PARTS=( ${XCODE_VERSION//./ } )
-    if test ! "${XC_VERSION_PARTS[0]}" = "4"; then
+    if test ! "${XC_VERSION_PARTS[0]}" -ge 4; then
       as_fn_error $? "Xcode 4 is required to build JDK 8, the version found was $XCODE_VERSION. Use --with-xcode-path to specify the location of Xcode 4 or make Xcode 4 active by using xcode-select." "$LINENO" 5
     fi
 
@@ -27842,7 +27842,7 @@ $as_echo "$as_me: The result from running it was: \"$COMPILER_VERSION_OUTPUT\"" 
     #     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     COMPILER_VERSION_OUTPUT=`$COMPILER --version 2>&1`
     # Check that this is likely to be GCC.
-    $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP "Free Software Foundation" > /dev/null
+    $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP "Apple LLVM version\|Free Software Foundation" > /dev/null
     if test $? -ne 0; then
       { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler." >&5
 $as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler." >&6;}
@@ -29583,7 +29583,7 @@ $as_echo "$as_me: The result from running it was: \"$COMPILER_VERSION_OUTPUT\"" 
     #     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     COMPILER_VERSION_OUTPUT=`$COMPILER --version 2>&1`
     # Check that this is likely to be GCC.
-    $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP "Free Software Foundation" > /dev/null
+    $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP "Apple LLVM version\|Free Software Foundation" > /dev/null
     if test $? -ne 0; then
       { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler." >&5
 $as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler." >&6;}
@@ -41333,7 +41333,12 @@ $as_echo "$ac_cv_c_bigendian" >&6; }
     CFLAGS_JDK="${CFLAGS_JDK} -qchars=signed -q64 -qfullpath -qsaveopt"
     CXXFLAGS_JDK="${CXXFLAGS_JDK} -qchars=signed -q64 -qfullpath -qsaveopt"
   elif test "x$TOOLCHAIN_TYPE" = xgcc; then
-    CXXSTD_CXXFLAG="-std=gnu++98"
+    CC_VER_STR=`${CC} -v 2>&1 | $GREP 'version'`
+    CC_VER_NUM_MAJOR=`echo ${CC_VER_STR} | $GREP 'version' | $SED 's/.* version[ ]*\([0-9]*\).*/\1/'`
+    if test \( `echo ${CC_VER_STR} | $GREP -c 'LLVM'` -eq "0" \) -a ${CC_VER_NUM_MAJOR} -lt "9" ; then
+      CXXSTD_CXXFLAG="-std=gnu++98"
+    fi
+
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking if the C++ compiler supports \"$CXXSTD_CXXFLAG -Werror\"" >&5
 $as_echo_n "checking if the C++ compiler supports \"$CXXSTD_CXXFLAG -Werror\"... " >&6; }
