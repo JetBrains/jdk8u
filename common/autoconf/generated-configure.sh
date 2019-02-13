@@ -4342,11 +4342,7 @@ VS_SDK_PLATFORM_NAME_2017=
 #CUSTOM_AUTOCONF_INCLUDE
 
 # Do not change or remove the following line, it is needed for consistency checks:
-<<<<<<< HEAD
 DATE_WHEN_GENERATED=1542996501
-=======
-DATE_WHEN_GENERATED=1542667963
->>>>>>> 7bed3ab... 8199552: Update to build scripts
 
 ###############################################################################
 #
@@ -41337,14 +41333,12 @@ $as_echo "$ac_cv_c_bigendian" >&6; }
     CFLAGS_JDK="${CFLAGS_JDK} -qchars=signed -q64 -qfullpath -qsaveopt"
     CXXFLAGS_JDK="${CXXFLAGS_JDK} -qchars=signed -q64 -qfullpath -qsaveopt"
   elif test "x$TOOLCHAIN_TYPE" = xgcc; then
-<<<<<<< HEAD
     CC_VER_STR=`${CC} -v 2>&1 | $GREP 'version'`
     CC_VER_NUM_MAJOR=`echo ${CC_VER_STR} | $GREP 'version' | $SED 's/.* version[ ]*\([0-9]*\).*/\1/'`
     if test \( `echo ${CC_VER_STR} | $GREP -c 'LLVM'` -eq "0" \) -a ${CC_VER_NUM_MAJOR} -lt "9" ; then
       CXXSTD_CXXFLAG="-std=gnu++98"
     fi
 
-=======
     case $OPENJDK_TARGET_CPU_ARCH in
     x86 )
       LEGACY_EXTRA_CFLAGS="$LEGACY_EXTRA_CFLAGS -fstack-protector"
@@ -41359,8 +41353,6 @@ $as_echo "$ac_cv_c_bigendian" >&6; }
       LDFLAGS_JDK="$LDFLAGS_JDK -Wl,-z,relro"
       LEGACY_EXTRA_LDFLAGS="$LEGACY_EXTRA_LDFLAGS -Wl,-z,relro"
     fi
-    CXXSTD_CXXFLAG="-std=gnu++98"
->>>>>>> 7bed3ab... 8199552: Update to build scripts
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking if the C++ compiler supports \"$CXXSTD_CXXFLAG -Werror\"" >&5
 $as_echo_n "checking if the C++ compiler supports \"$CXXSTD_CXXFLAG -Werror\"... " >&6; }

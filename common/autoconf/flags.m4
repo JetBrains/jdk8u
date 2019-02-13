@@ -388,14 +388,12 @@ AC_DEFUN_ONCE([FLAGS_SETUP_COMPILER_FLAGS_FOR_JDK],
     CFLAGS_JDK="${CFLAGS_JDK} -qchars=signed -q64 -qfullpath -qsaveopt"
     CXXFLAGS_JDK="${CXXFLAGS_JDK} -qchars=signed -q64 -qfullpath -qsaveopt"
   elif test "x$TOOLCHAIN_TYPE" = xgcc; then
-<<<<<<< HEAD
     $2CC_VER_STR=`${CC} -v 2>&1 | $GREP 'version'`
     $2CC_VER_NUM_MAJOR=`echo ${$2CC_VER_STR} | $GREP 'version' | $SED 's/.* version@<:@ @:>@*\(@<:@0-9@:>@*\).*/\1/'`
     if test \( `echo ${$2CC_VER_STR} | $GREP -c 'LLVM'` -eq "0" \) -a ${$2CC_VER_NUM_MAJOR} -lt "9" ; then
       $2CXXSTD_CXXFLAG="-std=gnu++98"
     fi
 
-=======
     case $OPENJDK_TARGET_CPU_ARCH in
     x86 )
       LEGACY_EXTRA_CFLAGS="$LEGACY_EXTRA_CFLAGS -fstack-protector"
@@ -410,8 +408,6 @@ AC_DEFUN_ONCE([FLAGS_SETUP_COMPILER_FLAGS_FOR_JDK],
       LDFLAGS_JDK="$LDFLAGS_JDK -Wl,-z,relro"
       LEGACY_EXTRA_LDFLAGS="$LEGACY_EXTRA_LDFLAGS -Wl,-z,relro"
     fi
-    $2CXXSTD_CXXFLAG="-std=gnu++98"
->>>>>>> 7bed3ab... 8199552: Update to build scripts
     FLAGS_CXX_COMPILER_CHECK_ARGUMENTS([[$]$2CXXSTD_CXXFLAG -Werror],
                                        [], [$2CXXSTD_CXXFLAG=""])
     $2CXXFLAGS_JDK="${$2CXXFLAGS_JDK} ${$2CXXSTD_CXXFLAG}"
