@@ -1,4 +1,15 @@
-[![official JetBrains project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+# JetBrains Runtime [![official JetBrains project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+	
+JetBrains Runtime is a runtime environment for running [IntelliJ Platform](https://github.com/JetBrains/intellij-community)-based products on Windows, macOS, and Linux. It is based on the [OpenJDK project](http://hg.openjdk.java.net/jdk8u/jdk8u/), with some modifications, including: 
+
+* Subpixel anti-aliasing
+* Enhanced font rendering on Linux
+* HiDPI support
+* Ligatures
+* Some fixes for native crashes not presented in official build
+* Other small enhancements
+
+JetBrains Runtime is not a certified build of OpenJDK.  Please, use at your own risk.
 
 # Downloads
 
